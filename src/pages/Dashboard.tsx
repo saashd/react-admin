@@ -1,8 +1,11 @@
 import React from "react";
+import Wrapper from "../components/Wrapper";
 
 function Dashboard() {
     return (
-        <div>Dashboard</div>
+        <Wrapper>
+            <div>Dashboard</div>
+        </Wrapper>
     )
 
 }
