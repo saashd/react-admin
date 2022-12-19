@@ -1,5 +1,6 @@
 import React, {ChangeEvent, SyntheticEvent, useState} from "react";
 import '../Login.css'
+import axios from "axios";
 
 function Register() {
     const [state, setState] = useState({firstName: "", lastName: "", email: "", password: "", passwordConfirm: ""})
@@ -9,7 +10,19 @@ function Register() {
     };
     const submit = (e: SyntheticEvent) => {
         e.preventDefault();
-        console.log(state)
+        const data = {
+            first_name: state.firstName,
+            last_name: state.lastName,
+            email: state.email,
+            password: state.password,
+            password_confirm: state.passwordConfirm
+        }
+        axios.post('http://localhost:8000/api/register', data).then(res => {
+            console.log(res)
+
+        }).catch((err) => {
+
+        })
 
     };
 
