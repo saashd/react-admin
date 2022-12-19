@@ -8,8 +8,8 @@ function Login() {
     const [redirect, setRedirect] = useState(false);
     const submit = (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/api/login',
-            {email, password}, {withCredentials: true}).then(res => {
+        axios.post('login',
+            {email, password}).then(res => {
             if (res.status === 200) {
                 setRedirect(true);
             }

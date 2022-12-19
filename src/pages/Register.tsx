@@ -25,7 +25,7 @@ function Register() {
             password: state.password,
             password_confirm: state.passwordConfirm
         };
-        axios.post('http://localhost:8000/api/register', data).then(res => {
+        axios.post('register', data).then(res => {
             setRedirect(true);
 
 
