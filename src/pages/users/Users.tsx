@@ -25,6 +25,15 @@ function Users() {
         setPage(page + 1 <= lastPage ? page + 1 : lastPage)
     };
 
+    const deleteUser = async (id: number) => {
+        if (window.confirm("Are you sure you want to delete this record?")) {
+            await axios.delete(`users/${id}`);
+            setUsers(users.filter((u: User) => u.id !== id))
+        }
+
+
+    };
+
     return (
         <Wrapper>
             <div className="table-responsive">
@@ -45,7 +54,12 @@ function Users() {
                                 <td>{user.first_name} {user.last_name}</td>
                                 <td>{user.email}</td>
                                 <td>{user.role.name}</td>
-                                <td></td>
+                                <td>
+                                    <div className="btn-group mr-2">
+                                        <a href="#" className="btn btn-sm btn-outline-secondary"
+                                           onClick={() => deleteUser(user.id)}> Delete</a>
+                                    </div>
+                                </td>
                             </tr>
 
                         )
