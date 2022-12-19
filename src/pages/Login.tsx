@@ -6,11 +6,11 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [redirect, setRedirect] = useState(false);
-    const submit = async (e: SyntheticEvent) => {
+    const submit = (e: SyntheticEvent) => {
         e.preventDefault();
-        await axios.post('http://localhost:8000/api/login',
+        axios.post('http://localhost:8000/api/login',
             {email, password}, {withCredentials: true}).then(res => {
-            if (res.status ===200) {
+            if (res.status === 200) {
                 setRedirect(true);
             }
 

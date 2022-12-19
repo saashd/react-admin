@@ -16,7 +16,7 @@ function Register() {
         setState({...state, [e.target.id]: e.target.value})
 
     };
-    const submit = async (e: SyntheticEvent) => {
+    const submit = (e: SyntheticEvent) => {
         e.preventDefault();
         const data = {
             first_name: state.firstName,
