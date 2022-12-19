@@ -1,8 +1,27 @@
 import Nav from "./Nav";
 import Menu from "./Menu";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
+import {Navigate} from "react-router-dom";
 
-function Wrapper(props: { children: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) {
+function Wrapper(props: any) {
+    const [redirect, setRedirect] = useState(false);
+    useEffect(() => {
+        (async () => {
+            try {
+                const {data} = await axios.get('user');
+
+            } catch (e) {
+                setRedirect(true);
+            }
+
+
+        })();
+    }, []);
+
+    if (redirect) {
+        return <Navigate to={'/login'}/>;
+    }
     return (<>
         <Nav/>
         <div className="container-fluid">

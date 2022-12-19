@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {ChangeEvent, SyntheticEvent, useState} from "react";
+import React, {SyntheticEvent, useState} from "react";
 import {Navigate} from "react-router-dom";
 
 function Login() {
