@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Users from "./pages/Users";
+import Users from "./pages/users/Users";
 import Dashboard from "./pages/Dashboard";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Register from "./pages/Register";
