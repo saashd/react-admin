@@ -56,13 +56,6 @@ function Roles() {
                 </tbody>
             </table>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul className="pagination">
-                {/*<li className="page-item"><a className="page-link" onClick={previous}>Previous</a></li>*/}
-                {/**/}
-                {/*<li className="page-item"><a className="page-link" onClick={next}>Next</a></li>*/}
-            </ul>
-        </nav>
     </Wrapper>);
 }
 

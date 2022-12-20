@@ -73,11 +73,11 @@ function Users() {
                     </tbody>
                 </table>
             </div>
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation">
                 <ul className="pagination">
-                    <li className="page-item"><a className="page-link" onClick={previous}>Previous</a></li>
+                    <li className="page-item"><button className="page-link" onClick={previous}>Previous</button></li>
 
-                    <li className="page-item"><a className="page-link" onClick={next}>Next</a></li>
+                    <li className="page-item"><button className="page-link" onClick={next}>Next</button></li>
                 </ul>
             </nav>
         </Wrapper>
