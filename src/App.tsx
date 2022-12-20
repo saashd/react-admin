@@ -7,6 +7,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import UserCreate from './pages/users/UserCreate';
 import UserEdit from "./pages/users/UserEdit";
+import Roles from './pages/roles/Roles';
+import RoleCreate from './pages/roles/RoleCreate';
 
 function App() {
     return (
@@ -17,6 +19,11 @@ function App() {
                     <Route path={'/'} element={<Dashboard/>}/>
                     <Route path={'/register'} element={<Register/>}/>
                     <Route path={'/login'} element={<Login/>}/>
+                    <Route path={'/roles'}>
+                        <Route index={true} element={<Roles/>}/>
+                        <Route path={'/roles/create'} element={<RoleCreate/>}/>
+                        {/*<Route path={'/roles/:id/edit'} element={<RoleEdit/>}/>*/}
+                    </Route>
                     <Route path={'/users'}>
                         <Route index={true} element={<Users/>}/>
                         <Route path={'/users/create'} element={<UserCreate/>}/>
