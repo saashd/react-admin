@@ -3,6 +3,7 @@ import Wrapper from "../../components/Wrapper";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Product} from "../../models/product";
+import Paginator from "../../components/Paginator";
 
 function Products() {
     const [page, setPage] = useState(1);
@@ -22,14 +23,6 @@ function Products() {
             await axios.delete(`products/${id}`);
             setProducts(products.filter((p: Product) => p.id !== id))
         }
-    };
-
-    const previous = () => {
-        setPage(page - 1 >= 1 ? page - 1 : 1)
-
-    };
-    const next = () => {
-        setPage(page + 1 <= lastPage ? page + 1 : lastPage)
     };
 
     return (<Wrapper>
@@ -73,17 +66,8 @@ function Products() {
                 </tbody>
             </table>
         </div>
-        <nav aria-label="Page navigation">
-            <ul className="pagination">
-                <li className="page-item">
-                    <button className="page-link" onClick={previous}>Previous</button>
-                </li>
+         <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)}/>
 
-                <li className="page-item">
-                    <button className="page-link" onClick={next}>Next</button>
-                </li>
-            </ul>
-        </nav>
     </Wrapper>);
 
 }

@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import Wrapper from "../../components/Wrapper";
 import {User} from "../../models/user";
 import {Link} from "react-router-dom";
+import Paginator from "../../components/Paginator";
 
 function Users() {
     const [users, setUsers] = useState([]);
@@ -18,13 +19,6 @@ function Users() {
         })()
     }, [page]);
 
-    const previous = () => {
-        setPage(page - 1 >= 1 ? page - 1 : 1)
-
-    };
-    const next = () => {
-        setPage(page + 1 <= lastPage ? page + 1 : lastPage)
-    };
 
     const deleteUser = async (id: number) => {
         if (window.confirm("Are you sure you want to delete this record?")) {
@@ -63,7 +57,8 @@ function Users() {
                                         <Link to={`/users/${user.id}/edit`}
                                               className="btn btn-sm btn-outline-secondary"> Edit</Link>
                                         <button className="btn btn-sm btn-outline-secondary"
-                                           onClick={() => deleteUser(user.id)}> Delete</button>
+                                                onClick={() => deleteUser(user.id)}> Delete
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -73,13 +68,8 @@ function Users() {
                     </tbody>
                 </table>
             </div>
-            <nav aria-label="Page navigation">
-                <ul className="pagination">
-                    <li className="page-item"><button className="page-link" onClick={previous}>Previous</button></li>
+            <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)}/>
 
-                    <li className="page-item"><button className="page-link" onClick={next}>Next</button></li>
-                </ul>
-            </nav>
         </Wrapper>
     );
 
