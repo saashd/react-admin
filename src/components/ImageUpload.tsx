@@ -10,7 +10,6 @@ function ImageUpload(props: { uploaded: (url: string) => void }) {
         formData.append('image', files[0]);
 
         axios.post("upload", formData).then(r => {
-            console.log(r)
             if (r.status == 200) {
                 props.uploaded(r.data.url)
             }
