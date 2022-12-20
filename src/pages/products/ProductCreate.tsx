@@ -2,6 +2,7 @@ import Wrapper from "../../components/Wrapper";
 import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate} from "react-router-dom";
+import ImageUpload from "../../components/ImageUpload";
 
 function CreateProduct() {
     const [product, setProduct] = useState({
@@ -12,13 +13,6 @@ function CreateProduct() {
     });
     const [redirect, setRedirect] = useState(false);
 
-    useEffect(() => {
-        (async () => {
-                const {data} = await axios.get('/products');
-                setProduct(data)
-            }
-        )()
-    }, []);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setProduct({...product, [e.target.id]: e.target.value})
@@ -52,15 +46,18 @@ function CreateProduct() {
             </div>
             <div className="form-group">
                 <label>Description</label>
-                <input id="description" type="text" className="form-control"
-                       onChange={handleChange}
-                />
+                <textarea id="description" className="form-control"
+                          onChange={(e)=>{ setProduct({...product, [e.target.id]: e.target.value})}}/>
             </div>
             <div className="form-group">
                 <label>Image</label>
-                <input id="image" type="text" className="form-control"
-                       onChange={handleChange}
-                />
+                <div className="input-group">
+                    <input id="image" type="text" className="form-control"
+                           value={product.image ?? ""}
+                           onChange={handleChange}
+                    />
+                    <ImageUpload uploaded={url => setProduct({...product, image: url})}/>
+                </div>
             </div>
             <div className="form-group">
                 <label>Price</label>
