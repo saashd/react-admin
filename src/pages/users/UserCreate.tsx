@@ -30,7 +30,7 @@ function CreateUser() {
     const submit = (e: SyntheticEvent) => {
         e.preventDefault();
         axios.post('users', user).then(res => {
-            if (res.status === 200) {
+            if (res.status === 201) {
                 setRedirect(true);
             }
 
