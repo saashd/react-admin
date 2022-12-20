@@ -1,5 +1,4 @@
 import Wrapper from "../../components/Wrapper";
-import {Role} from "../../models/role";
 import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate} from "react-router-dom";

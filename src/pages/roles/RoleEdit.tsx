@@ -1,5 +1,4 @@
 import Wrapper from "../../components/Wrapper";
-import {Role} from "../../models/role";
 import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate, useParams} from "react-router-dom";
@@ -24,7 +23,7 @@ function RoleEdit() {
 
             }
         )()
-    }, []);
+    }, [id]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setRoleName(e.target.value)

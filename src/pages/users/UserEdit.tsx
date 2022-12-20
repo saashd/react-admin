@@ -14,14 +14,14 @@ function UserEdit() {
     });
     const [redirect, setRedirect] = useState(false);
     const params = useParams();
-    let id = params.id;
+
 
     useEffect(() => {
         (async () => {
                 const res = await axios.get('/roles');
                 setRoles(res.data);
 
-                const {data} = await axios.get(`users/${id}`);
+                const {data} = await axios.get(`users/${params.id}`);
                 setUser({
                     first_name: data.first_name,
                     last_name: data.last_name,
@@ -31,7 +31,7 @@ function UserEdit() {
 
             }
         )()
-    }, []);
+    }, [params.id]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUser({...user, [e.target.id]: e.target.value})
@@ -40,8 +40,8 @@ function UserEdit() {
 
     const submit = (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.put(`users/${id}`, user).then(res => {
-            if (res.status === 200) {
+        axios.put(`users/${params.id}`, user).then(res => {
+            if (res.status === 202) {
                 setRedirect(true);
             }
 
