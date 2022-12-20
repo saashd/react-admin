@@ -2,9 +2,9 @@ import Wrapper from "../../components/Wrapper";
 import {Role} from "../../models/role";
 import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
-import {Navigate} from "react-router-dom";
+import {Navigate, useParams} from "react-router-dom";
 
-function CreateUser() {
+function UserEdit() {
     const [roles, setRoles] = useState([]);
     const [user, setUser] = useState({
         first_name: "",
@@ -13,11 +13,22 @@ function CreateUser() {
         role_id: "",
     });
     const [redirect, setRedirect] = useState(false);
+    const params = useParams();
+    let id = params.id;
 
     useEffect(() => {
         (async () => {
-                const {data} = await axios.get('/roles');
-                setRoles(data)
+                const res = await axios.get('/roles');
+                setRoles(res.data);
+
+                const {data} = await axios.get(`users/${id}`);
+                setUser({
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    email: data.email,
+                    role_id: data.role.id
+                })
+
             }
         )()
     }, []);
@@ -29,7 +40,7 @@ function CreateUser() {
 
     const submit = (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.post('users', user).then(res => {
+        axios.put(`users/${id}`, user).then(res => {
             if (res.status === 200) {
                 setRedirect(true);
             }
@@ -49,18 +60,21 @@ function CreateUser() {
             <div className="form-group">
                 <label>First Name</label>
                 <input id="first_name" type="text" className="form-control"
+                       defaultValue={user.first_name}
                        onChange={handleChange}
                 />
             </div>
             <div className="form-group">
                 <label>Last Name</label>
                 <input id="last_name" type="text" className="form-control"
+                       defaultValue={user.last_name}
                        onChange={handleChange}
                 />
             </div>
             <div className="form-group">
                 <label>Email</label>
                 <input id="email" type="text" className="form-control"
+                       defaultValue={user.email}
                        onChange={handleChange}
                 />
             </div>
@@ -68,6 +82,7 @@ function CreateUser() {
             <div className="form-group">
                 <label>Role</label>
                 <select id="role_id" className="form-control"
+                        value={user.role_id}
                         onChange={(e) => {
                             setUser({...user, [e.target.id]: e.target.value})
                         }}>
@@ -87,4 +102,4 @@ function CreateUser() {
     </Wrapper>);
 }
 
-export default CreateUser;
+export default UserEdit;
