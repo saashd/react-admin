@@ -13,6 +13,7 @@ import RoleEdit from './pages/roles/RoleEdit';
 import Products from "./pages/products/Products";
 import ProductCreate from './pages/products/ProductCreate';
 import ProductEdit from './pages/products/ProductEdit';
+import Orders from './pages/orders/Orders';
 
 function App() {
     return (
@@ -38,6 +39,7 @@ function App() {
                         <Route path={'/products/create'} element={<ProductCreate/>}/>
                         <Route path={'/products/:id/edit'} element={<ProductEdit/>}/>
                     </Route>
+                    <Route path={'/orders'} element={<Orders/>}/>
                 </Routes>
             </Router>
         </div>
