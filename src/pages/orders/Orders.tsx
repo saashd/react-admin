@@ -8,12 +8,12 @@ import {OrderItem} from "../../models/order-item";
 
 const hide = {
     maxHeight: 0,
-    transition:'1000ms ease-in'
+    transition: '1000ms ease-in'
 };
 
 const show = {
     maxHeight: '150px',
-    transition:'1000ms ease-out'
+    transition: '1000ms ease-out'
 };
 
 function Orders() {
@@ -36,8 +36,29 @@ function Orders() {
     const select = (id: number) => {
         setSelected(selected === id ? 0 : id)
     };
+    const exportCSV = () => {
+        axios.post("export", {}, {responseType: 'blob'}).then(r => {
+            if (r.status === 200) {
+                const blob = new Blob([r.data, {type: 'text/csv'}]);
+                const url = window.URL.createObjectURL(r.data);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'orders.csv';
+                link.click()
+
+            }
+
+        }).catch(err => {
+            console.log(err)
+        })
+
+    };
 
     return (<Wrapper>
+        <div className="pt-3 pb-2 mb-3 border-bottom">
+            <a href='#' className="btn btn-sm btn-outline-secondary"
+               onClick={exportCSV}> Export</a>
+        </div>
         <div className="pt-3 pb-2 mb-3 border-bottom">
             <Link to='/orderds/create' className="btn btn-sm btn-outline-secondary"> Add</Link>
         </div>
@@ -55,7 +76,7 @@ function Orders() {
                 <tbody>
                 {orders.map((order: Order) => {
                     return (
-                        <>
+                        <React.Fragment key={order.id}>
                             <tr key={order.id}>
                                 <td>{order.id}</td>
                                 <td>{order.name} </td>
@@ -97,7 +118,7 @@ function Orders() {
                                     </div>
                                 </td>
                             </tr>
-                        </>
+                        </React.Fragment>
 
                     )
                 })}
