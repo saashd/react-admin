@@ -6,10 +6,21 @@ import axios from "axios";
 import {Order} from "../../models/order";
 import {OrderItem} from "../../models/order-item";
 
+const hide = {
+    maxHeight: 0,
+    transition:'1000ms ease-in'
+};
+
+const show = {
+    maxHeight: '150px',
+    transition:'1000ms ease-out'
+};
+
 function Orders() {
     const [orders, setOrders] = useState([]);
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(0);
+    const [selected, setSelected] = useState(0);
 
     useEffect(() => {
         (async () => {
@@ -22,20 +33,16 @@ function Orders() {
     }, [page]);
 
 
-    const deleteOrder = async (id: number) => {
-        if (window.confirm("Are you sure you want to delete this record?")) {
-            await axios.delete(`orders/${id}`);
-            setOrders(orders.filter((o: Order) => o.id !== id))
-        }
-
-
+    const select = (id: number) => {
+        setSelected(selected === id ? 0 : id)
     };
+
     return (<Wrapper>
         <div className="pt-3 pb-2 mb-3 border-bottom">
             <Link to='/orderds/create' className="btn btn-sm btn-outline-secondary"> Add</Link>
         </div>
         <div className="table-responsive">
-            <table className="table table-striped table-sm">
+            <table className="table table-sm">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -56,14 +63,15 @@ function Orders() {
                                 <td>{order.total}</td>
                                 <td>
                                     <div className="btn-group mr-2">
-                                        <button className="btn btn-sm btn-outline-secondary"> View
+                                        <button className="btn btn-sm btn-outline-secondary"
+                                                onClick={() => select(order.id)}> View
                                         </button>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td colSpan={5}>
-                                    <div>
+                                    <div className="overflow-hidden" style={selected === order.id ? show : hide}>
                                         <table className="table table-sm">
                                             <thead>
                                             <tr>
