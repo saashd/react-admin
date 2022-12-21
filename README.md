@@ -14,5 +14,5 @@ The project created as a part of a udemy course [Udemy](https://www.udemy.com/co
 
 - **Bootstrap** 
 
--**Docker**
+- **Docker**
 
