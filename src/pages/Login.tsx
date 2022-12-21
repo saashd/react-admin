@@ -1,22 +1,21 @@
 import axios from "axios";
 import React, {SyntheticEvent, useState} from "react";
 import {Navigate} from "react-router-dom";
+import handleError from "../api";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [redirect, setRedirect] = useState(false);
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.post('login',
-            {email, password}).then(res => {
-            if (res.status === 200) {
-                setRedirect(true);
-            }
+        try {
+            await axios.post('login', {email, password});
+            setRedirect(true);
 
-        }).catch(err => {
-            console.log(err)
-        })
+        } catch (error) {
+            handleError(error)
+        }
 
 
     };

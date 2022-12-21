@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Product} from "../../models/product";
 import Paginator from "../../components/Paginator";
+import handleError from "../../api";
 
 function Products() {
     const [page, setPage] = useState(1);
@@ -11,17 +12,28 @@ function Products() {
     const [products, setProducts] = useState([]);
     useEffect(() => {
         (async () => {
-                const {data} = await axios.get(`products?page=${page}`);
-                setProducts(data.data);
-                setLastPage(data.meta.last_page)
+                try {
+                    const {data} = await axios.get(`products?page=${page}`);
+                    setProducts(data.data);
+                    setLastPage(data.meta.last_page)
+                } catch (e) {
+                    handleError(e)
+
+                }
+
+
             }
         )()
     }, [page]);
 
     const deleteProduct = async (id: number) => {
         if (window.confirm("Are you sure you want to delete this record?")) {
-            await axios.delete(`products/${id}`);
-            setProducts(products.filter((p: Product) => p.id !== id))
+            try {
+                await axios.delete(`products/${id}`);
+                setProducts(products.filter((p: Product) => p.id !== id))
+            } catch (e) {
+                handleError(e)
+            }
         }
     };
 
@@ -66,7 +78,7 @@ function Products() {
                 </tbody>
             </table>
         </div>
-         <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)}/>
+        <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)}/>
 
     </Wrapper>);
 

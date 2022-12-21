@@ -4,6 +4,7 @@ import Wrapper from "../../components/Wrapper";
 import {User} from "../../models/user";
 import {Link} from "react-router-dom";
 import Paginator from "../../components/Paginator";
+import handleError from "../../api";
 
 function Users() {
     const [users, setUsers] = useState([]);
@@ -12,9 +13,15 @@ function Users() {
 
     useEffect(() => {
         (async () => {
-            const {data} = await axios.get(`users?page=${page}`);
-            setUsers(data.data);
-            setLastPage(data.meta.last_page)
+              try {
+                  const {data} = await axios.get(`users?page=${page}`);
+                  setUsers(data.data);
+                  setLastPage(data.meta.last_page)
+
+        } catch (e) {
+            handleError(e)
+
+        }
 
         })()
     }, [page]);
@@ -22,8 +29,14 @@ function Users() {
 
     const deleteUser = async (id: number) => {
         if (window.confirm("Are you sure you want to delete this record?")) {
-            await axios.delete(`users/${id}`);
-            setUsers(users.filter((u: User) => u.id !== id))
+              try {
+                  await axios.delete(`users/${id}`);
+                  setUsers(users.filter((u: User) => u.id !== id))
+        } catch (e) {
+            handleError(e)
+
+        }
+
         }
 
 

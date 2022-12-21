@@ -6,6 +6,7 @@ import {Navigate} from "react-router-dom";
 import {connect} from "react-redux";
 import {User} from "../models/user";
 import {setUser} from "../redux/actions/setUserAction";
+import handleError from "../api";
 
 function Wrapper(props: any) {
     const [redirect, setRedirect] = useState(false);
@@ -20,10 +21,13 @@ function Wrapper(props: any) {
                         data.last_name,
                         data.email,
                         data.role
-                    ))
+                    ));
 
-            } catch (e) {
+
+            } catch (error) {
                 setRedirect(true);
+                handleError(error);
+
             }
 
 

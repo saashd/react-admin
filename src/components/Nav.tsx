@@ -4,19 +4,20 @@ import {Link} from "react-router-dom";
 import {Navigate} from "react-router-dom";
 import {connect} from "react-redux";
 import {User} from "../models/user";
+import handleError from "../api";
 
-function Nav(props:{user:User}) {
+function Nav(props: { user: User }) {
     const [signout, setSignout] = useState(false);
 
 
-    const logout = () => {
-        axios.post('logout', {}).then(res => {
-            if (res.status === 200) {
-                setSignout(true)
-            }
-        }).catch(err => {
-            console.log(err)
-        })
+    const logout = async () => {
+        try {
+            await axios.post('logout', {});
+            setSignout(true)
+        } catch (error) {
+            handleError(error)
+        }
+
 
     };
     if (signout) {

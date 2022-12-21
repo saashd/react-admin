@@ -3,6 +3,7 @@ import React, {ChangeEvent, SyntheticEvent, useState} from "react";
 import axios from "axios";
 import {Navigate} from "react-router-dom";
 import ImageUpload from "../../components/ImageUpload";
+import handleError from "../../api";
 
 function CreateProduct() {
     const [product, setProduct] = useState({
@@ -19,17 +20,17 @@ function CreateProduct() {
 
     };
 
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.post('products', product).then(res => {
-            if (res.status === 201) {
-                setRedirect(true);
-            }
+        try {
+            await axios.post('products', product);
+            setRedirect(true);
+        } catch (e) {
+            handleError(e)
 
-        }).catch((err) => {
-            console.log(err)
+        }
 
-        })
+
     };
 
     if (redirect) {
@@ -47,7 +48,9 @@ function CreateProduct() {
             <div className="form-group">
                 <label>Description</label>
                 <textarea id="description" className="form-control"
-                          onChange={(e)=>{ setProduct({...product, [e.target.id]: e.target.value})}}/>
+                          onChange={(e) => {
+                              setProduct({...product, [e.target.id]: e.target.value})
+                          }}/>
             </div>
             <div className="form-group">
                 <label>Image</label>

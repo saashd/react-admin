@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Order} from "../../models/order";
 import {OrderItem} from "../../models/order-item";
+import handleError from "../../api";
 
 const hide = {
     maxHeight: 0,
@@ -24,11 +25,14 @@ function Orders() {
 
     useEffect(() => {
         (async () => {
-            const {data} = await axios.get(`orders?page=${page}`);
-            setOrders(data.data);
-            setLastPage(data.meta.last_page)
+            try {
+                const {data} = await axios.get(`orders?page=${page}`);
+                setOrders(data.data);
+                setLastPage(data.meta.last_page)
+            } catch (e) {
+                handleError(e)
 
-
+            }
         })()
     }, [page]);
 
@@ -36,28 +40,29 @@ function Orders() {
     const select = (id: number) => {
         setSelected(selected === id ? 0 : id)
     };
-    const exportCSV = () => {
-        axios.post("export", {}, {responseType: 'blob'}).then(r => {
-            if (r.status === 200) {
-                const blob = new Blob([r.data, {type: 'text/csv'}]);
-                const url = window.URL.createObjectURL(r.data);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'orders.csv';
-                link.click()
+    const exportCSV = async () => {
+        try {
+            const {data} = await axios.post("export", {}, {responseType: 'blob'});
 
-            }
+            const blob = new Blob([data, {type: 'text/csv'}]);
+            const url = window.URL.createObjectURL(data);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'orders.csv';
+            link.click()
+        } catch (e) {
+            handleError(e)
 
-        }).catch(err => {
-            console.log(err)
-        })
+        }
+
 
     };
 
     return (<Wrapper>
         <div className="pt-3 pb-2 mb-3 border-bottom">
             <button className="btn btn-sm btn-outline-secondary"
-               onClick={exportCSV}> Export</button>
+                    onClick={exportCSV}> Export
+            </button>
         </div>
         <div className="pt-3 pb-2 mb-3 border-bottom">
             <Link to='/orderds/create' className="btn btn-sm btn-outline-secondary"> Add</Link>

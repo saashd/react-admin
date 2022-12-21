@@ -1,25 +1,20 @@
 import axios from "axios";
 import React from "react";
+import handleError from "../api";
 
 function ImageUpload(props: { uploaded: (url: string) => void }) {
-    const upload = (files: FileList | null) => {
+    const upload = async (files: FileList | null) => {
         if (files === null) {
             return;
         }
         const formData = new FormData();
         formData.append('image', files[0]);
-
-        axios.post("upload", formData).then(r => {
-            if (r.status === 200) {
-                props.uploaded(r.data.url)
-            }
-
-
-        }).catch(err => {
-            console.log(err)
-        })
-
-
+        try {
+            const {data} = await axios.post("upload", formData);
+            props.uploaded(data.url)
+        } catch (error){
+            handleError(error)
+        }
     };
     return (<label className="btn btn-primary">
         Upload <input type="file" hidden

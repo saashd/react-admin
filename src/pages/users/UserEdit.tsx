@@ -3,6 +3,7 @@ import {Role} from "../../models/role";
 import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate, useParams} from "react-router-dom";
+import handleError from "../../api";
 
 function UserEdit() {
     const [roles, setRoles] = useState([]);
@@ -18,17 +19,20 @@ function UserEdit() {
 
     useEffect(() => {
         (async () => {
-                const res = await axios.get('/roles');
-                setRoles(res.data);
+                try {
+                    const res = await axios.get('/roles');
+                    setRoles(res.data);
 
-                const {data} = await axios.get(`users/${params.id}`);
-                setUser({
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    email: data.email,
-                    role_id: data.role.id
-                })
-
+                    const {data} = await axios.get(`users/${params.id}`);
+                    setUser({
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        email: data.email,
+                        role_id: data.role.id
+                    })
+                } catch (e) {
+                    handleError(e)
+                }
             }
         )()
     }, [params.id]);
@@ -38,17 +42,17 @@ function UserEdit() {
 
     };
 
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.put(`users/${params.id}`, user).then(res => {
-            if (res.status === 202) {
-                setRedirect(true);
-            }
+        try {
+            await axios.put(`users/${params.id}`, user);
+            setRedirect(true);
+        } catch (e) {
+            handleError(e)
 
-        }).catch((err) => {
-            console.log(err)
+        }
 
-        })
+
     };
 
     if (redirect) {

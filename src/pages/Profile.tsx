@@ -4,6 +4,7 @@ import axios from "axios";
 import {User} from "../models/user";
 import {connect} from "react-redux";
 import {setUser} from "../redux/actions/setUserAction";
+import handleError from "../api";
 
 function Profile(props: { user: User, setUser: (user: User) => void }) {
     const [state, setState] = useState({
@@ -29,33 +30,37 @@ function Profile(props: { user: User, setUser: (user: User) => void }) {
 
     const updateInfo = async (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.put('users/info', {
-            first_name: state.first_name,
-            last_name: state.last_name,
-            email: state.email,
-        }).then(r => {
-            if (r.status === 202) {
-                props.setUser(new User(
-                    r.data.id,
-                    r.data.first_name,
-                    r.data.last_name,
-                    r.data.email,
-                    r.data.role
-                ));
-            }
+        try {
+            const {data} = await axios.put('users/info', {
+                first_name: state.first_name,
+                last_name: state.last_name,
+                email: state.email,
+            });
+            props.setUser(new User(
+                data.id,
+                data.first_name,
+                data.last_name,
+                data.email,
+                data.role
+            ));
 
-        }).catch(err => {
-            console.log(err)
-        })
+        } catch (e) {
+            handleError(e)
+        }
     };
 
 
     const updatePassword = async (e: SyntheticEvent) => {
         e.preventDefault();
-        await axios.put('users/password', {
-            password: state.password,
-            password_confirm: state.password_confirm
-        })
+
+        try {
+            await axios.put('users/password', {
+                password: state.password,
+                password_confirm: state.password_confirm
+            })
+        } catch (e) {
+            handleError(e)
+        }
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

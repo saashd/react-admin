@@ -3,23 +3,30 @@ import Wrapper from "../../components/Wrapper";
 import {Link} from "react-router-dom";
 import axios from "axios";
 import {Role} from "../../models/role";
-
+import handleError from "../../api";
 
 
 function Roles() {
     const [roles, setRoles] = useState([]);
     useEffect(() => {
         (async () => {
+            try {
                 const {data} = await axios.get('/roles');
                 setRoles(data);
+            } catch (e) {
+                handleError(e)
             }
-        )()
+        })()
     }, []);
 
     const deleteRole = async (id: number) => {
         if (window.confirm("Are you sure you want to delete this record?")) {
-            await axios.delete(`roles/${id}`);
-            setRoles(roles.filter((r: Role) => r.id !== id))
+            try {
+                await axios.delete(`roles/${id}`);
+                setRoles(roles.filter((r: Role) => r.id !== id))
+            } catch (e) {
+                handleError(e)
+            }
         }
     };
     return (<Wrapper>
@@ -45,8 +52,9 @@ function Roles() {
                                 <div className="btn-group mr-2">
                                     <Link to={`/roles/${role.id}/edit`}
                                           className="btn btn-sm btn-outline-secondary"> Edit</Link>
-                                    <button  className="btn btn-sm btn-outline-secondary"
-                                       onClick={() => deleteRole(role.id)}> Delete</button>
+                                    <button className="btn btn-sm btn-outline-secondary"
+                                            onClick={() => deleteRole(role.id)}> Delete
+                                    </button>
                                 </div>
                             </td>
                         </tr>

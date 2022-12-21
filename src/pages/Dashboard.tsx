@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import Wrapper from "../components/Wrapper";
 import * as c3 from 'c3';
 import axios from "axios";
+import handleError from "../api";
 
 function Dashboard() {
 
@@ -29,13 +30,17 @@ function Dashboard() {
                     }
                 }
             });
-            const {data} = await axios.get("chart");
-            chart.load({
-                columns: [
-                    ['x', ...data.map((r: any) => r.date)],
-                    ['Sales', ...data.map((r: any) => r.sum)]
-                ]
-            })
+            try {
+                const {data} = await axios.get("chart");
+                chart.load({
+                    columns: [
+                        ['x', ...data.map((r: any) => r.date)],
+                        ['Sales', ...data.map((r: any) => r.sum)]
+                    ]
+                })
+            } catch (e) {
+                handleError(e)
+            }
 
 
         })()

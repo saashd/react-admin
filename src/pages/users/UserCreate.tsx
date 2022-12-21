@@ -3,6 +3,7 @@ import {Role} from "../../models/role";
 import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate} from "react-router-dom";
+import handleError from "../../api";
 
 function CreateUser() {
     const [roles, setRoles] = useState([]);
@@ -16,8 +17,13 @@ function CreateUser() {
 
     useEffect(() => {
         (async () => {
-                const {data} = await axios.get('/roles');
-                setRoles(data)
+                try {
+                    const {data} = await axios.get('/roles');
+                    setRoles(data)
+                } catch (e) {
+                    handleError(e)
+
+                }
             }
         )()
     }, []);
@@ -27,17 +33,17 @@ function CreateUser() {
 
     };
 
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.post('users', user).then(res => {
-            if (res.status === 201) {
-                setRedirect(true);
-            }
+        try {
+            await axios.post('users', user);
+            setRedirect(true);
+        } catch (e) {
+            handleError(e)
 
-        }).catch((err) => {
-            console.log(err)
+        }
 
-        })
+
     };
 
     if (redirect) {

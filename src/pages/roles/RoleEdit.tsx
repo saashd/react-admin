@@ -3,6 +3,7 @@ import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate, useParams} from "react-router-dom";
 import {Permission} from "../../models/permission";
+import handleError from "../../api";
 
 function RoleEdit() {
     const [permissions, setPermissions] = useState([]);
@@ -14,13 +15,17 @@ function RoleEdit() {
 
     useEffect(() => {
         (async () => {
-                const res = await axios.get('/permissions');
-                setPermissions(res.data);
+                try {
+                    const res = await axios.get('/permissions');
+                    setPermissions(res.data);
 
-                const {data} = await axios.get(`roles/${id}`);
-                setRoleName(data.name);
-                setSelected(data.permissions.map((p: Permission) => p.id));
+                    const {data} = await axios.get(`roles/${id}`);
+                    setRoleName(data.name);
+                    setSelected(data.permissions.map((p: Permission) => p.id));
+                } catch (e) {
+                    handleError(e)
 
+                }
             }
         )()
     }, [id]);
@@ -29,16 +34,17 @@ function RoleEdit() {
         setRoleName(e.target.value)
     };
 
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.put(`roles/${id}`, {name: roleName, permissions: selected}).then(res => {
-            if (res.status === 202) {
-                setRedirect(true);
-            }
-        }).catch((err) => {
-            console.log(err)
+        try {
+            await axios.put(`roles/${id}`, {name: roleName, permissions: selected});
+            setRedirect(true);
+        } catch (e) {
+            handleError(e)
 
-        })
+        }
+
+
     };
 
     const check = (id: number) => {

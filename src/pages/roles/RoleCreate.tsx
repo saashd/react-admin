@@ -3,6 +3,7 @@ import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate} from "react-router-dom";
 import {Permission} from "../../models/permission";
+import handleError from "../../api";
 
 function CreateRole() {
     const [permissions, setPermissions] = useState([]);
@@ -12,8 +13,14 @@ function CreateRole() {
 
     useEffect(() => {
         (async () => {
-                const {data} = await axios.get('/permissions');
-                setPermissions(data)
+                try {
+                    const {data} = await axios.get('/permissions');
+                    setPermissions(data)
+                } catch (e) {
+                    handleError(e)
+
+                }
+
             }
         )()
     }, []);
@@ -22,17 +29,17 @@ function CreateRole() {
         setRoleName(e.target.value)
     };
 
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.post('roles', {name: roleName, permissions: selected}).then(res => {
-            if (res.status === 201) {
-                setRedirect(true);
-            }
+        try {
+            await axios.post('roles', {name: roleName, permissions: selected});
+            setRedirect(true);
 
-        }).catch((err) => {
-            console.log(err)
+        } catch (e) {
+            handleError(e)
 
-        })
+        }
+
     };
 
     const check = (id: number) => {

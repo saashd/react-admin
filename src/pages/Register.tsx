@@ -2,6 +2,7 @@ import React, {ChangeEvent, SyntheticEvent, useState} from "react";
 import '../Login.css'
 import axios from "axios";
 import {Navigate} from "react-router-dom";
+import handleError from "../api";
 
 function Register() {
     const [state, setState] = useState({
@@ -16,7 +17,7 @@ function Register() {
         setState({...state, [e.target.id]: e.target.value})
 
     };
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
         const data = {
             first_name: state.firstName,
@@ -25,15 +26,14 @@ function Register() {
             password: state.password,
             password_confirm: state.passwordConfirm
         };
-        axios.post('register', data).then(res => {
+        try {
+            await axios.post('register', data);
             setRedirect(true);
 
+        } catch (e) {
+            handleError(e)
 
-        }).catch((err) => {
-            console.log(err)
-
-        })
-
+        }
     };
     if (redirect) {
         return <Navigate to={'/login'}/>;

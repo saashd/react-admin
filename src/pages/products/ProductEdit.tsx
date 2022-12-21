@@ -3,6 +3,7 @@ import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate, useParams} from "react-router-dom";
 import ImageUpload from "../../components/ImageUpload";
+import handleError from "../../api";
 
 function EditProduct() {
     const [product, setProduct] = useState({
@@ -17,15 +18,17 @@ function EditProduct() {
 
     useEffect(() => {
         (async () => {
-
-                const {data} = await axios.get(`products/${id}`);
-                setProduct({
-                    title: data.title,
-                    description: data.description,
-                    image: data.image,
-                    price: data.price
-                })
-
+                try {
+                    const {data} = await axios.get(`products/${id}`);
+                    setProduct({
+                        title: data.title,
+                        description: data.description,
+                        image: data.image,
+                        price: data.price
+                    })
+                } catch (e) {
+                    handleError(e)
+                }
             }
         )()
     }, [id]);
@@ -36,17 +39,17 @@ function EditProduct() {
 
     };
 
-    const submit = (e: SyntheticEvent) => {
+    const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-        axios.put(`products/${id}`, product).then(res => {
-            if (res.status === 202) {
-                setRedirect(true);
-            }
+        try {
+            await axios.put(`products/${id}`, product);
+            setRedirect(true);
+        } catch (e) {
+            handleError(e)
 
-        }).catch((err) => {
-            console.log(err)
+        }
 
-        })
+
     };
 
     if (redirect) {
