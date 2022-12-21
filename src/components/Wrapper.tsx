@@ -1,8 +1,11 @@
 import Nav from "./Nav";
 import Menu from "./Menu";
-import React, {useEffect, useState} from "react";
+import React, {Dispatch, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate} from "react-router-dom";
+import {connect} from "react-redux";
+import {User} from "../models/user";
+import {setUser} from "../redux/actions/setUserAction";
 
 function Wrapper(props: any) {
     const [redirect, setRedirect] = useState(false);
@@ -10,6 +13,14 @@ function Wrapper(props: any) {
         (async () => {
             try {
                 const {data} = await axios.get('user');
+                props.setUser(
+                    new User(
+                        data.id,
+                        data.first_name,
+                        data.last_name,
+                        data.email,
+                        data.role
+                    ))
 
             } catch (e) {
                 setRedirect(true);
@@ -35,4 +46,18 @@ function Wrapper(props: any) {
     </>);
 }
 
-export default Wrapper;
+
+const mapStateToProps = (state: { user: User }) => {
+    return {
+        user: state.user
+    }
+
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+    return {
+        setUser: (user: User) => dispatch(setUser(user))
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);
