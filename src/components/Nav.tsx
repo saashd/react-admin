@@ -25,13 +25,13 @@ function Nav(props:{user:User}) {
 
     return (
         <nav className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a className="navbar-brand col-md-3 col-lg-2 mr-0 px-3 " href="#">Company name</a>
+            <a className="navbar-brand col-md-3 col-lg-2 mr-0 px-3 " href="/#">Company name</a>
 
 
             <ul className="my-2 my-md-0 mr-md-3 ">
                 <Link to="/profile"
                       className="-2 text-white text-decoration-none ">{props.user.name}</Link>
-                <a className="-2 text-white text-decoration-none" href="#"
+                <a className="-2 text-white text-decoration-none" href="/#"
                    onClick={logout}>Sign out</a>
             </ul>
 

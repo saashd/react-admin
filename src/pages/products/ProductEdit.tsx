@@ -3,7 +3,6 @@ import React, {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Navigate, useParams} from "react-router-dom";
 import ImageUpload from "../../components/ImageUpload";
-import {Permission} from "../../models/permission";
 
 function EditProduct() {
     const [product, setProduct] = useState({

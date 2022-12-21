@@ -56,8 +56,8 @@ function Orders() {
 
     return (<Wrapper>
         <div className="pt-3 pb-2 mb-3 border-bottom">
-            <a href='#' className="btn btn-sm btn-outline-secondary"
-               onClick={exportCSV}> Export</a>
+            <button className="btn btn-sm btn-outline-secondary"
+               onClick={exportCSV}> Export</button>
         </div>
         <div className="pt-3 pb-2 mb-3 border-bottom">
             <Link to='/orderds/create' className="btn btn-sm btn-outline-secondary"> Add</Link>

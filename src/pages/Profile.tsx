@@ -34,7 +34,7 @@ function Profile(props: { user: User, setUser: (user: User) => void }) {
             last_name: state.last_name,
             email: state.email,
         }).then(r => {
-            if (r.status == 202) {
+            if (r.status === 202) {
                 props.setUser(new User(
                     r.data.id,
                     r.data.first_name,
